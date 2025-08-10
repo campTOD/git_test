@@ -38,6 +38,17 @@ window.addEventListener('scroll', () => {
   });
 });
 
+// Hide nav by tapping the bar background (not the links)
+const bubbleNav = document.querySelector('.bubble-nav');
+if (bubbleNav && navContainer && navToggle) {
+  bubbleNav.addEventListener('click', (e) => {
+    if (e.target.closest('a,button')) return; // ignore clicks on links/buttons
+    navContainer.classList.toggle('minimized');
+    const minimized = navContainer.classList.contains('minimized');
+    navToggle.textContent = minimized ? '×' : '☰';
+  });
+}
+
 // Gallery Slider
 class GallerySlider {
   constructor() {
