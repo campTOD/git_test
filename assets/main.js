@@ -138,53 +138,98 @@ const revealObserver = new IntersectionObserver((entries) => {
   el.style.opacity = '0'; el.style.transform = 'translateY(24px)'; el.style.transition = 'all .6s ease'; revealObserver.observe(el);
 });
 
-// Booking Modal (Calendly embed with lazy load)
+// Booking Modal (only if present)
 const bookingModal = document.getElementById('bookingModal');
-const bookingEmbed = document.getElementById('bookingEmbed');
-const bookingExternal = document.getElementById('bookingExternal');
-const openBookingButtons = [
-  document.getElementById('openBooking'),
-  document.getElementById('openBookingHero'),
-  document.getElementById('openBookingContact')
-].filter(Boolean);
-const closeBooking = document.getElementById('closeBooking');
-const bookingBackdrop = document.getElementById('bookingBackdrop');
-
-// Set your booking URL here (Calendly or any external booking system)
-const BOOKING_URL = 'https://calendly.com/your-salon/30min';
-bookingExternal.href = BOOKING_URL;
-
-function loadCalendlyEmbed() {
-  // Avoid duplicate loads
-  if (bookingEmbed.dataset.loaded === 'true') return;
-  bookingEmbed.dataset.loaded = 'true';
-
-  // Inline widget container
-  const widget = document.createElement('div');
-  widget.className = 'calendly-inline-widget';
-  widget.setAttribute('data-url', BOOKING_URL);
-  widget.style.minWidth = '320px';
-  widget.style.height = '100%';
-  bookingEmbed.appendChild(widget);
-
-  // Load Calendly script lazily
-  const script = document.createElement('script');
-  script.src = 'https://assets.calendly.com/assets/external/widget.js';
-  script.async = true;
-  document.body.appendChild(script);
+if (bookingModal) {
+  const bookingEmbed = document.getElementById('bookingEmbed');
+  const bookingExternal = document.getElementById('bookingExternal');
+  const openBookingButtons = [
+    document.getElementById('openBooking'),
+    document.getElementById('openBookingHero'),
+    document.getElementById('openBookingContact')
+  ].filter(Boolean);
+  const closeBooking = document.getElementById('closeBooking');
+  const bookingBackdrop = document.getElementById('bookingBackdrop');
+  const BOOKING_URL = 'https://calendly.com/your-salon/30min';
+  bookingExternal.href = BOOKING_URL;
+  function loadCalendlyEmbed() {
+    if (bookingEmbed.dataset.loaded === 'true') return;
+    bookingEmbed.dataset.loaded = 'true';
+    const widget = document.createElement('div');
+    widget.className = 'calendly-inline-widget';
+    widget.setAttribute('data-url', BOOKING_URL);
+    widget.style.minWidth = '320px';
+    widget.style.height = '100%';
+    bookingEmbed.appendChild(widget);
+    const script = document.createElement('script');
+    script.src = 'https://assets.calendly.com/assets/external/widget.js';
+    script.async = true;
+    document.body.appendChild(script);
+  }
+  function openBooking() { bookingModal.classList.add('open'); bookingModal.setAttribute('aria-hidden', 'false'); loadCalendlyEmbed(); }
+  function closeBookingModal() { bookingModal.classList.remove('open'); bookingModal.setAttribute('aria-hidden', 'true'); }
+  openBookingButtons.forEach((btn) => btn.addEventListener('click', (e) => { e.preventDefault(); openBooking(); }));
+  closeBooking.addEventListener('click', closeBookingModal);
+  bookingBackdrop.addEventListener('click', closeBookingModal);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && bookingModal.classList.contains('open')) closeBookingModal(); });
 }
 
-function openBooking() {
-  bookingModal.classList.add('open');
-  bookingModal.setAttribute('aria-hidden', 'false');
-  loadCalendlyEmbed();
-}
-function closeBookingModal() {
-  bookingModal.classList.remove('open');
-  bookingModal.setAttribute('aria-hidden', 'true');
-}
-openBookingButtons.forEach((btn) => btn.addEventListener('click', openBooking));
-closeBooking.addEventListener('click', closeBookingModal);
-bookingBackdrop.addEventListener('click', closeBookingModal);
+// Booking page form handling (only if present)
+const bookingForm = document.getElementById('bookingForm');
+if (bookingForm) {
+  const serviceSelect = document.getElementById('service');
+  const techSelect = document.getElementById('tech');
+  const dateInput = document.getElementById('date');
+  const timeInput = document.getElementById('time');
+  const nameInput = document.getElementById('name');
+  const emailInput = document.getElementById('email');
+  const phoneInput = document.getElementById('phone');
+  const notesInput = document.getElementById('notes');
+  const summaryBox = document.getElementById('summary');
+  const totalPrice = document.getElementById('totalPrice');
 
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && bookingModal.classList.contains('open')) closeBookingModal(); });
+  function getSelectedServicePrice() {
+    const option = serviceSelect.selectedOptions[0];
+    return Number(option?.dataset.price || 0);
+  }
+  function updateSummary() {
+    const serviceText = serviceSelect.selectedOptions[0]?.textContent || '';
+    const techText = techSelect.value || 'Random';
+    const dateText = dateInput.value || '—';
+    const timeText = timeInput.value || '—';
+    const price = getSelectedServicePrice();
+    totalPrice.textContent = `$${price.toFixed(2)}`;
+    summaryBox.innerHTML = `
+      <div><strong>Service:</strong> ${serviceText}</div>
+      <div><strong>Nail tech:</strong> ${techText}</div>
+      <div><strong>Date:</strong> ${dateText}</div>
+      <div><strong>Time:</strong> ${timeText}</div>
+      <div><strong>Name:</strong> ${nameInput.value}</div>
+      <div><strong>Email:</strong> ${emailInput.value}</div>
+      <div><strong>Phone:</strong> ${phoneInput.value}</div>
+    `;
+  }
+  ['change','input'].forEach((evt) => {
+    [serviceSelect, techSelect, dateInput, timeInput, nameInput, emailInput, phoneInput].forEach((el) => el.addEventListener(evt, updateSummary));
+  });
+  updateSummary();
+
+  bookingForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!serviceSelect.value || !dateInput.value || !timeInput.value || !nameInput.value || !emailInput.value) {
+      alert('Please complete required fields.');
+      return;
+    }
+    const BOOKING_URL = 'https://calendly.com/your-salon/30min';
+    const params = new URLSearchParams({
+      name: nameInput.value,
+      email: emailInput.value,
+      a1: serviceSelect.selectedOptions[0]?.textContent || '',
+      a2: techSelect.value || 'Random',
+      a3: `${dateInput.value} ${timeInput.value}`,
+      a4: phoneInput.value,
+      a5: notesInput.value
+    });
+    window.open(`${BOOKING_URL}?${params.toString()}`, '_blank');
+  });
+}

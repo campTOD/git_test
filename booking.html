@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Book Appointment — Sugar Coat Beauty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <div class="nav-container">
+    <nav class="bubble-nav">
+      <a href="/index.html#hero" class="nav-item">Home</a>
+      <a href="/index.html#services" class="nav-item">Services</a>
+      <a href="/index.html#testimonials" class="nav-item">Reviews</a>
+      <a href="/index.html#gallery" class="nav-item">Gallery</a>
+      <a href="/index.html#contact" class="nav-item">Contact</a>
+      <a class="btn-primary btn-book" href="#start">Book Now</a>
+    </nav>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+
+  <section class="section" id="start">
+    <div class="booking-wrapper">
+      <div class="section-header" style="text-align:left; margin-bottom:18px;">
+        <h2 class="serif">Book Appointment</h2>
+        <p class="muted">Choose your service, nail tech, date and time, then enter your contact details. We’ll confirm your booking.</p>
+      </div>
+
+      <div class="booking-grid">
+        <!-- Left: Form -->
+        <div class="card">
+          <div class="card-header">
+            <div class="serif" style="font-size:1.2rem;">Details</div>
+            <div class="muted">Sugar Coat Beauty</div>
+          </div>
+          <div class="card-body">
+            <form id="bookingForm">
+              <div class="form-grid">
+                <div class="form-row full">
+                  <label for="service">Service</label>
+                  <select id="service" required>
+                    <option value="" disabled selected>Select a service</option>
+                    <option value="acrylic" data-price="55">Acrylic Nails — from $55</option>
+                    <option value="gel" data-price="45">Gel Manicure — $45</option>
+                    <option value="classic" data-price="35">Classic Manicure — $35</option>
+                    <option value="pedicure" data-price="55">Luxury Pedicure — $55</option>
+                    <option value="art" data-price="15">Nail Art — from $15</option>
+                    <option value="dip" data-price="50">Dip Powder — $50</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="tech">Nail tech</label>
+                  <select id="tech">
+                    <option value="Random" selected>Random (first available)</option>
+                    <option value="Ava">Ava</option>
+                    <option value="Mia">Mia</option>
+                    <option value="Sofia">Sofia</option>
+                    <option value="Zoe">Zoe</option>
+                  </select>
+                </div>
+
+                <div class="form-row">
+                  <label for="date">Preferred date</label>
+                  <input id="date" type="date" required />
+                </div>
+
+                <div class="form-row">
+                  <label for="time">Preferred time</label>
+                  <input id="time" type="time" required />
+                </div>
+
+                <div class="form-row">
+                  <label for="name">Full name</label>
+                  <input id="name" type="text" placeholder="Your name" required />
+                </div>
+
+                <div class="form-row">
+                  <label for="email">Email</label>
+                  <input id="email" type="email" placeholder="you@example.com" required />
+                </div>
+
+                <div class="form-row">
+                  <label for="phone">Phone</label>
+                  <input id="phone" type="tel" placeholder="(708) 555-2628" />
+                </div>
+
+                <div class="form-row full">
+                  <label for="notes">Notes (optional)</label>
+                  <textarea id="notes" placeholder="Design ideas, allergies, parking notes, etc."></textarea>
+                </div>
+
+                <div class="form-row full submit-row">
+                  <span class="muted">You’ll be able to adjust time if needed.</span>
+                  <button type="submit" class="btn-primary">Continue</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right: Summary -->
+        <div class="card">
+          <div class="card-header">
+            <div class="serif" style="font-size:1.2rem;">Summary</div>
+            <div class="muted">Review your selection</div>
+          </div>
+          <div class="card-body">
+            <div id="summary" class="muted" style="display:grid; gap:6px;"></div>
+            <div class="total-line"><span>Total</span><span id="totalPrice">$0.00</span></div>
+            <p class="muted" style="margin-top:10px;">Prices shown are estimates. Nail art and extras may affect the final total.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="/assets/main.js" defer></script>
+</body>
+</html>
