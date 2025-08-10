@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugar Coat Beauty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+            background-color: #ffffff;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container.minimized {
+            transform: translateX(-50%) translateY(-100px);
+            opacity: 0;
+        }
+
+        .bubble-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+        }
+
+        .nav-item {
+            padding: 8px 16px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: #4b5563;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: #6b7280;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            color: #4b5563;
+        }
+
+        .nav-toggle:hover {
+            transform: scale(1.1);
+            background: #6b7280;
+            color: white;
+        }
+
+        /* Typography */
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .uppercase {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                        url('https://images.unsplash.com/photo-1560066984-138dadb4c35?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            letter-spacing: 3px;
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn-primary {
+            background: #6b7280;
+            color: white;
+            padding: 18px 35px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #4b5563;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(107, 114, 128, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #4b5563;
+            padding: 12px 24px;
+            border: 2px solid #e5e7eb;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+            border-radius: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: #f9fafb;
+            border-color: #6b7280;
+            transform: translateY(-2px);
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 100px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-alt {
+            background-color: #f9fafb;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 300;
+            color: #374151;
+            margin-bottom: 20px;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .service-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            border-color: #d1d5db;
+        }
+
+        .service-image {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover .service-image {
+            transform: scale(1.05);
+        }
+
+        .service-content {
+            padding: 30px 25px;
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #6b7280;
+        }
+
+        .service-title {
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #374151;
+            margin-bottom: 15px;
+        }
+
+        .service-description {
+            color: #6b7280;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .service-price {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        /* Booking Section */
+        .booking {
+            background: #f3f4f6;
+        }
+
+        .booking-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        .booking-form {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6b7280;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .calendar-widget {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+
+        .calendar-header {
+            background: #6b7280;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .calendar-nav button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .calendar-nav button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e5e7eb;
+        }
+
+        .calendar-day {
+            background: white;
+            padding: 15px 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-day:hover {
+            background: #f3f4f6;
+        }
+
+        .calendar-day.available {
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .calendar-day.available:hover {
+            background: #dcfce7;
+        }
+
+        .calendar-day.selected {
+            background: #6b7280;
+            color: white;
+        }
+
+        .calendar-day.disabled {
+            background: #f9fafb;
+            color: #d1d5db;
+            cursor: not-allowed;
+        }
+
+        .calendar-day-header {
+            background: #f3f4f6;
+            font-weight: 600;
+            color: #4b5563;
+            font-size: 0.8rem;
+            padding: 10px 5px;
+        }
+
+        .time-slots {
+            padding: 20px;
+            background: white;
+        }
+
+        .time-slots h4 {
+            margin-bottom: 15px;
+            color: #374151;
+            font-weight: 600;
+        }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+        }
+
+        .time-slot {
+            padding: 10px;
+            text-align: center;
+            border: 2px solid #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            background: white;
+        }
+
+        .time-slot:hover {
+            border-color: #6b7280;
+            background: #f9fafb;
+        }
+
+        .time-slot.selected {
+            background: #6b7280;
+            color: white;
+            border-color: #6b7280;
+        }
+
+        .time-slot.unavailable {
+            background: #f9fafb;
+            color: #d1d5db;
+            cursor: not-allowed;
+            border-color: #e5e7eb;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .testimonial {
+            background: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+        }
+
+        .testimonial:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .testimonial-quote {
+            font-size: 1.1rem;
+            color: #6b7280;
+            margin-bottom: 25px;
+            font-style: italic;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .heart {
+            color: #6b7280;
+            font-size: 1.2rem;
+        }
+
+        .testimonial-service {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Gallery Section */
+        .gallery-container {
+            position: relative;
+            margin-top: 60px;
+        }
+
+        .gallery-wrapper {
+            overflow: hidden;
+            border-radius: 15px;
+            position: relative;
+            border: 1px solid #e5e7eb;
+        }
+
+        .gallery-slider {
+            display: flex;
+            transition: transform 0.5s ease;
+            will-change: transform;
+        }
+
+        .gallery-slide {
+            min-width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            background: white;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            background-color: #f5f5f5;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid #e5e7eb;
+        }
+
+        .gallery-item.lazy {
+            background-image: none !important;
+        }
+
+        .gallery-item.lazy::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 3px solid #6b7280;
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(107, 114, 128, 0.8), rgba(0,0,0,0.3));
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            color: white;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .gallery-item:hover .gallery-caption {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .gallery-btn {
+            background: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+        }
+
+        .gallery-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+            background: #4b5563;
+        }
+
+        .gallery-btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .gallery-dots {
+            display: flex;
+            gap: 10px;
+        }
+
+        .gallery-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-dot.active {
+            background: #6b7280;
+            transform: scale(1.2);
+        }
+
+        /* Contact Section */
+        .contact {
+            background: #374151;
+            color: white;
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .contact h2 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-item {
+            padding: 20px;
+        }
+
+        .contact-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #d1d5db;
+        }
+
+        .contact-item p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .contact-item a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            color: #d1d5db;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #374151;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .close {
+            color: #9ca3af;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            margin-top: -10px;
+        }
+
+        .close:hover {
+            color: #4b5563;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .bubble-nav {
+                padding: 8px 15px;
+                gap: 8px;
+                flex-wrap: wrap;
+                justify-content: center;
+                max-width: calc(100vw - 100px);
+            }
+
+            .nav-item {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+
+            .nav-toggle {
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+
+            .hero .logo {
+                font-size: 2.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .services-grid,
+            .testimonials {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .time-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .gallery-slide {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 15px;
+            }
+
+            .gallery-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-form {
+                padding: 30px 20px;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                padding: 30px 20px;
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-slide {
+                grid-template-columns: 1fr;
+            }
+
+            .bubble-nav {
+                flex-direction: column;
+                gap: 5px;
+                padding: 10px;
+            }
+
+            .calendar-day {
+                min-height: 40px;
+                font-size: 0.8rem;
+            }
+
+            .hero .logo {
+                font-size: 2rem;
+            }
+        }
+
+        /* Smooth animations */
+        .service-card,
+        .testimonial,
+        .gallery-item {
+            will-change: transform;
+        }
+
+        /* Loading states */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid #6b7280;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="nav-container" id="navContainer">
+        <nav class="bubble-nav">
+            <a href="#hero" class="nav-item active">Home</a>
+            <a href="#services" class="nav-item">Services</a>
+            <a href="#booking" class="nav-item">Book Now</a>
+            <a href="#testimonials" class="nav-item">Reviews</a>
+            <a href="#gallery" class="nav-item">Gallery</a>
+            <a href="#contact" class="nav-item">Contact</a>
+        </nav>
+    </div>
+    
+    <button class="nav-toggle" id="navToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1 class="logo serif">SUGAR COAT</h1>
+            <p class="tagline uppercase">Premium Nail & Beauty Studio</p>
+            <a href="#booking" class="btn-primary uppercase">Book Appointment</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section" id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="serif">Our Services</h2>
+                <p>Professional nail care and beauty treatments in the heart of Countryside, Illinois</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1604654894610-df63bc536371?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                    <div class="service-content">
+                        <div class="service-icon"><i class="fas fa-hand-sparkles"></i></div>
+                        <h3 class="service-title serif">Acrylic Nails</h3>
+                        <p class="service-description">Full set of durable acrylic extensions with your choice of shape and length. Perfect for special occasions or everyday elegance.</p>
+                        <div class="service-price">Starting at $55</div>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                    <div class="service-content">
+                        <div class="service-icon"><i class="fas fa-star"></i></div>
+                        <h3 class="service-title serif">Gel Manicure</h3>
+                        <p class="service-description">Long-lasting gel polish that stays chip-free for weeks. Includes cuticle care, nail shaping, and professional application.</p>
+                        <div class="service-price">$45</div>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                    <div class="service-content">
+                        <div class="service-icon"><i class="fas fa-gem"></i></div>
+                        <h3 class="service-title serif">Classic Manicure</h3>
+                        <p class="service-description">Traditional manicure with nail shaping, cuticle care, hand massage, and your choice of premium polish colors.</p>
+                        <div class="service-price">$35</div>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1610992015732-2449b76344bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                    <div class="service-content">
+                        <div class="service-icon"><i class="fas fa-spa"></i></div>
+                        <h3 class="service-title serif">Luxury Pedicure</h3>
+                        <p class="service-description">Relaxing foot treatment with exfoliation, massage, and polish application. Includes hot towel service and moisturizing.</p>
+                        <div class="service-price">$55</div>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1632345031435-8727f6897d53?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                    <div class="service-content">
+                        <div class="service-icon"><i class="fas fa-palette"></i></div>
+                        <h3 class="service-title serif">Nail Art</h3>
+                        <p class="service-description">Custom nail designs created by our talented artists. From simple accents to intricate patterns and seasonal themes.</p>
+                        <div class="service-price">$15+ per nail</div>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1562251833-1cd31bc2a75b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80')"></div>
+                    <div class="service-content">
+                        <div class="service-icon"><i class="fas fa-magic"></i></div>
+                        <h3 class="service-title serif">Dip Powder</h3>
+                        <p class="service-description">Durable and lightweight alternative to acrylics. Long-lasting color with a natural feel and healthy nail growth.</p>
+                        <div class="service-price">$50</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section class="section booking" id="booking">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="serif">Book Your Appointment</h2>
+                <p>Schedule your visit with our easy online booking system</p>
+            </div>
+            <div class="booking-container">
+                <div class="calendar-widget">
+                    <div class="calendar-header">
+                        <div class="calendar-nav">
+                            <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                            <h3 id="currentMonth">March 2024</h3>
+                            <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar will be generated by JavaScript -->
+                    </div>
+                    <div class="time-slots" id="timeSlots">
+                        <h4>Available Times</h4>
+                        <div class="time-grid" id="timeGrid">
+                            <!-- Time slots will be generated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                <form class="booking-form" id="bookingForm">
+                    <h3 class="serif" style="margin-bottom: 30px; color: #374151;">Appointment Details</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name *</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name *</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="service">Service *</label>
+                        <select id="service" name="service" required>
+                            <option value="">Select a service</option>
+                            <option value="acrylic">Acrylic Nails - $55+</option>
+                            <option value="gel">Gel Manicure - $45</option>
+                            <option value="classic">Classic Manicure - $35</option>
+                            <option value="pedicure">Luxury Pedicure - $55</option>
+                            <option value="nailart">Nail Art - $15+ per nail</option>
+                            <option value="dip">Dip Powder - $50</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="selectedDateTime">Selected Date & Time</label>
+                        <input type="text" id="selectedDateTime" name="selectedDateTime" readonly placeholder="Please select date and time above">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Special Requests (Optional)</label>
+                        <textarea id="notes" name="notes" rows="3" placeholder="Any special requests or nail design ideas..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="width: 100%; margin-top: 20px;">
+                        <i class="fas fa-calendar-check" style="margin-right: 8px;"></i>
+                        Confirm Booking
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section section-alt" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="serif">Client Love</h2>
+                <p>What our amazing clients have to say about their Sugar Coat experience</p>
+            </div>
+            <div class="testimonials">
+                <div class="testimonial">
+                    <p class="testimonial-quote">"Absolutely love my acrylic nails! The attention to detail is incredible and they last for weeks. The studio is so clean and relaxing - it's my monthly treat to myself."</p>
+                    <div class="testimonial-author">
+                        <span>Sarah M.</span>
+                        <span class="heart"><i class="fas fa-heart"></i></span>
+                    </div>
+                    <div class="testimonial-service">Acrylic Full Set</div>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-quote">"Best gel manicure I've ever had! The color selection is amazing and my nails still look perfect after 3 weeks. The staff is so professional and friendly."</p>
+                    <div class="testimonial-author">
+                        <span>Jessica L.</span>
+                        <span class="heart"><i class="fas fa-heart"></i></span>
+                    </div>
+                    <div class="testimonial-service">Gel Manicure</div>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-quote">"The nail art here is next level! They created exactly what I envisioned and the quality is outstanding. I always get compliments on my nails!"</p>
+                    <div class="testimonial-author">
+                        <span>Amanda K.</span>
+                        <span class="heart"><i class="fas fa-heart"></i></span>
+                    </div>
+                    <div class="testimonial-service">Custom Nail Art</div>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-quote">"Such a relaxing pedicure experience! The massage was heavenly and my feet have never looked better. The atmosphere is so calming and luxurious."</p>
+                    <div class="testimonial-author">
+                        <span>Maria R.</span>
+                        <span class="heart"><i class="fas fa-heart"></i></span>
+                    </div>
+                    <div class="testimonial-service">Luxury Pedicure</div>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-quote">"I'm obsessed with dip powder and this is the only place I trust! They're so gentle with my natural nails and the results are always flawless."</p>
+                    <div class="testimonial-author">
+                        <span>Rachel T.</span>
+                        <span class="heart"><i class="fas fa-heart"></i></span>
+                    </div>
+                    <div class="testimonial-service">Dip Powder</div>
+                </div>
+                <div class="testimonial">
+                    <p class="testimonial-quote">"Countryside's best kept secret! The quality and service here is unmatched. I've been coming for over a year and they never disappoint."</p>
+                    <div class="testimonial-author">
+                        <span>Lisa W.</span>
+                        <span class="heart"><i class="fas fa-heart"></i></span>
+                    </div>
+                    <div class="testimonial-service">Regular Client</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="section" id="gallery">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="serif">Our Work</h2>
+                <p>Browse through our recent nail art and beauty transformations</p>
+            </div>
+            <div class="gallery-container">
+                <div class="gallery-wrapper">
+                    <div class="gallery-slider" id="gallerySlider">
+                        <!-- Slide 1 -->
+                        <div class="gallery-slide">
+                            <div class="gallery-item lazy" data-bg="https://images.unsplash.com/photo-1604654894610-df63bc536371?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                <div class="gallery-caption">Acrylic Full Set with French Tips</div>
+                            </div>
+                            <div class="gallery-item lazy" data-bg="https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                <div class="gallery-caption">Gel Manicure - Rose Gold</div>
+                            </div>
+                            <div class="gallery-item lazy" data-bg="https://images.unsplash.com/photo-1632345031435-8727f6897d53?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                <div class="gallery-caption">Custom Floral Nail Art</div>
+                            </div>
+                            <div class="gallery-item lazy" data-bg="https://images.unsplash.com/photo-1610992015732-2449b76344bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                <div class="gallery-caption">Luxury Pedicure Treatment</div>
+                            </div>
+                        </div>
+                        <!-- Slide 2 -->
+                        <div class="gallery-slide">
+                            <div class="gallery-item lazy" data-bg="https://images.unsplash.com/photo-1562251833-1cd31bc2a75b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                <div class="gallery-caption">Dip Powder - Nude Collection</div>
+                            </div>
+                            <div class="gallery-item lazy" data-bg="https://images.unsplash.com/photo-1609142840224-808cf2728334?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                <div class="gallery-caption">Holiday Themed Nail Art</div>
+                            </div>
+                            <div class="gallery-item lazy" data-bg="https://images.unsplash.com/photo-1535949139751-72ce7ae4b789?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                <div class="gallery-caption">Ombre Acrylic Design</div>
+                            </div>
+                            <div class="gallery-item lazy" data-bg="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                <div class="gallery-caption">Gel Extensions - Coffin Shape</div>
+                            </div>
+                        </div>
+                        <!-- Slide 3 -->
+                        <div class="gallery-slide">
+                            <div class="gallery-item lazy" data-bg="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                <div class="gallery-caption">Chrome Nail Finish</div>
+                            </div>
+                            <div class="gallery-item lazy" data-bg="https://images.unsplash.com/photo-1582095133179-bfd08e2fc6b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                <div class="gallery-caption">Stiletto Acrylic Set</div>
+                            </div>
+                            <div class="gallery-item lazy" data-bg="https://images.unsplash.com/photo-1603731047807-2d8c49ceb75b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                <div class="gallery-caption">Matte Black Design</div>
+                            </div>
+                            <div class="gallery-item lazy" data-bg="https://images.unsplash.com/photo-1574450132949-6e58b47b3071?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80">
+                                <div class="gallery-caption">Rainbow Gradient Nails</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-nav">
+                    <button class="gallery-btn" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+                    <div class="gallery-dots" id="galleryDots"></div>
+                    <button class="gallery-btn" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="serif">Get In Touch</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h3><i class="fas fa-phone"></i> Call Us</h3>
+                    <p><a href="tel:7085552628">(708) 555-COAT</a></p>
+                    <p>Monday - Saturday: 9AM - 7PM<br>Sunday: 10AM - 5PM</p>
+                </div>
+                <div class="contact-item">
+                    <h3><i class="fas fa-envelope"></i> Email</h3>
+                    <p><a href="mailto:hello@sugarcoatbeauty.com">hello@sugarcoatbeauty.com</a></p>
+                    <p>We'll respond within 24 hours</p>
+                </div>
+                <div class="contact-item">
+                    <h3><i class="fas fa-map-marker-alt"></i> Location</h3>
+                    <p>5847 S LaGrange Road<br>Countryside, IL 60525</p>
+                    <p>Free parking available</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Confirmation Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <div class="modal-header">
+                <h3><i class="fas fa-check-circle" style="color: #6b7280; margin-right: 10px;"></i>Booking Confirmed!</h3>
+                <p>Thank you for choosing Sugar Coat Beauty. We've received your appointment request.</p>
+            </div>
+            <div id="bookingDetails" style="text-align: left; margin: 20px 0; padding: 20px; background: #f9fafb; border-radius: 8px;">
+                <!-- Booking details will be inserted here -->
+            </div>
+            <p style="color: #6b7280; font-size: 0.9rem;">You'll receive a confirmation email shortly with all the details.</p>
+            <button class="btn-primary" id="modalOkBtn" style="margin-top: 20px;">Perfect!</button>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        let isNavVisible = true;
+        const navContainer = document.getElementById('navContainer');
+        const navToggle = document.getElementById('navToggle');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        // Toggle navigation visibility
+        navToggle.addEventListener('click', () => {
+            isNavVisible = !isNavVisible;
+            const icon = navToggle.querySelector('i');
+            if (isNavVisible) {
+                navContainer.classList.remove('minimized');
+                icon.className = 'fas fa-bars';
+            } else {
+                navContainer.classList.add('minimized');
+                icon.className = 'fas fa-times';
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = item.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+                
+                // Update active nav item
+                navItems.forEach(navItem => navItem.classList.remove('active'));
+                item.classList.add('active');
+                
+                // Hide nav on mobile after clicking
+                if (window.innerWidth <= 768) {
+                    navContainer.classList.add('minimized');
+                    isNavVisible = false;
+                    navToggle.querySelector('i').className = 'fas fa-bars';
+                }
+            });
+        });
+
+        // Update active nav item based on scroll position
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const scrollPos = window.scrollY + 100;
+
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const bottom = top + section.offsetHeight;
+                const id = section.getAttribute('id');
+
+                if (scrollPos >= top && scrollPos <= bottom) {
+                    navItems.forEach(item => {
+                        item.classList.remove('active');
+                        if (item.getAttribute('href') === `#${id}`) {
+                            item.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+
+        // Calendar and Booking System
+        class BookingCalendar {
+            constructor() {
+                this.currentDate = new Date();
+                this.selectedDate = null;
+                this.selectedTime = null;
+                this.calendarGrid = document.getElementById('calendarGrid');
+                this.currentMonthElement = document.getElementById('currentMonth');
+                this.prevMonthBtn = document.getElementById('prevMonth');
+                this.nextMonthBtn = document.getElementById('nextMonth');
+                this.timeGrid = document.getElementById('timeGrid');
+                this.bookingForm = document.getElementById('bookingForm');
+                this.selectedDateTimeInput = document.getElementById('selectedDateTime');
+                
+                // Available time slots (in 24-hour format)
+                this.timeSlots = [
+                    '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+                    '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
+                    '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00'
+                ];
+                
+                // Mock unavailable slots (in real app, this would come from backend)
+                this.unavailableSlots = {
+                    '2024-03-15': ['10:00', '14:00', '16:30'],
+                    '2024-03-16': ['11:00', '15:00'],
+                    // Add more as needed
+                };
+
+                this.init();
+            }
+
+            init() {
+                this.renderCalendar();
+                this.setupEventListeners();
+                this.generateTimeSlots();
+            }
+
+            setupEventListeners() {
+                this.prevMonthBtn.addEventListener('click', () => this.previousMonth());
+                this.nextMonthBtn.addEventListener('click', () => this.nextMonth());
+                this.bookingForm.addEventListener('submit', (e) => this.handleBookingSubmit(e));
+            }
+
+            renderCalendar() {
+                const year = this.currentDate.getFullYear();
+                const month = this.currentDate.getMonth();
+                
+                // Update month header
+                this.currentMonthElement.textContent = new Intl.DateTimeFormat('en-US', {
+                    month: 'long',
+                    year: 'numeric'
+                }).format(this.currentDate);
+
+                // Clear previous calendar
+                this.calendarGrid.innerHTML = '';
+
+                // Add day headers
+                const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                dayHeaders.forEach(day => {
+                    const dayHeader = document.createElement('div');
+                    dayHeader.className = 'calendar-day calendar-day-header';
+                    dayHeader.textContent = day;
+                    this.calendarGrid.appendChild(dayHeader);
+                });
+
+                // Get first day of month and number of days
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const today = new Date();
+
+                // Add empty cells for days before month starts
+                for (let i = 0; i < firstDay; i++) {
+                    const emptyDay = document.createElement('div');
+                    emptyDay.className = 'calendar-day disabled';
+                    this.calendarGrid.appendChild(emptyDay);
+                }
+
+                // Add days of the month
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayElement = document.createElement('div');
+                    const currentDayDate = new Date(year, month, day);
+                    const isToday = currentDayDate.toDateString() === today.toDateString();
+                    const isPast = currentDayDate < today && !isToday;
+                    const isWeekend = currentDayDate.getDay() === 0; // Sunday (salon closed)
+
+                    dayElement.className = 'calendar-day';
+                    dayElement.textContent = day;
+
+                    if (isPast || isWeekend) {
+                        dayElement.classList.add('disabled');
+                    } else {
+                        dayElement.classList.add('available');
+                        dayElement.addEventListener('click', () => this.selectDate(currentDayDate));
+                    }
+
+                    if (this.selectedDate && 
+                        currentDayDate.toDateString() === this.selectedDate.toDateString()) {
+                        dayElement.classList.add('selected');
+                    }
+
+                    this.calendarGrid.appendChild(dayElement);
+                }
+            }
+
+            selectDate(date) {
+                this.selectedDate = date;
+                this.selectedTime = null;
+                this.renderCalendar();
+                this.updateTimeSlots();
+                this.updateSelectedDateTime();
+            }
+
+            generateTimeSlots() {
+                this.timeSlots.forEach(time => {
+                    const timeSlot = document.createElement('div');
+                    timeSlot.className = 'time-slot';
+                    timeSlot.textContent = this.formatTime(time);
+                    timeSlot.dataset.time = time;
+                    timeSlot.addEventListener('click', () => this.selectTime(time));
+                    this.timeGrid.appendChild(timeSlot);
+                });
+            }
+
+            updateTimeSlots() {
+                const timeSlots = this.timeGrid.querySelectorAll('.time-slot');
+                const selectedDateStr = this.selectedDate ? this.selectedDate.toISOString().split('T')[0] : null;
+                const unavailableToday = this.unavailableSlots[selectedDateStr] || [];
+
+                timeSlots.forEach(slot => {
+                    slot.classList.remove('selected', 'unavailable');
+                    
+                    if (!this.selectedDate) {
+                        slot.classList.add('unavailable');
+                        return;
+                    }
+
+                    const slotTime = slot.dataset.time;
+                    
+                    // Check if slot is unavailable
+                    if (unavailableToday.includes(slotTime)) {
+                        slot.classList.add('unavailable');
+                        slot.style.pointerEvents = 'none';
+                    } else {
+                        slot.style.pointerEvents = 'auto';
+                    }
+
+                    // Mark selected time
+                    if (this.selectedTime === slotTime) {
+                        slot.classList.add('selected');
+                    }
+                });
+            }
+
+            selectTime(time) {
+                if (this.timeGrid.querySelector(`[data-time="${time}"]`).classList.contains('unavailable')) {
+                    return;
+                }
+                
+                this.selectedTime = time;
+                this.updateTimeSlots();
+                this.updateSelectedDateTime();
+            }
+
+            updateSelectedDateTime() {
+                if (this.selectedDate && this.selectedTime) {
+                    const formattedDate = this.selectedDate.toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    const formattedTime = this.formatTime(this.selectedTime);
+                    this.selectedDateTimeInput.value = `${formattedDate} at ${formattedTime}`;
+                } else {
+                    this.selectedDateTimeInput.value = '';
+                }
+            }
+
+            formatTime(time24) {
+                const [hours, minutes] = time24.split(':');
+                const date = new Date();
+                date.setHours(parseInt(hours), parseInt(minutes));
+                return date.toLocaleTimeString('en-US', {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
+                });
+            }
+
+            previousMonth() {
+                this.currentDate.setMonth(this.currentDate.getMonth() - 1);
+                this.renderCalendar();
+            }
+
+            nextMonth() {
+                this.currentDate.setMonth(this.currentDate.getMonth() + 1);
+                this.renderCalendar();
+            }
+
+            handleBookingSubmit(e) {
+                e.preventDefault();
+                
+                if (!this.selectedDate || !this.selectedTime) {
+                    alert('Please select a date and time for your appointment.');
+                    return;
+                }
+
+                // Get form data
+                const formData = new FormData(this.bookingForm);
+                const bookingData = {
+                    firstName: formData.get('firstName'),
+                    lastName: formData.get('lastName'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    service: formData.get('service'),
+                    date: this.selectedDate.toISOString().split('T')[0],
+                    time: this.selectedTime,
+                    notes: formData.get('notes')
+                };
+
+                // Validate required fields
+                if (!bookingData.firstName || !bookingData.lastName || !bookingData.email || 
+                    !bookingData.phone || !bookingData.service) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+
+                this.showBookingConfirmation(bookingData);
+            }
+
+            showBookingConfirmation(bookingData) {
+                const modal = document.getElementById('bookingModal');
+                const bookingDetails = document.getElementById('bookingDetails');
+                
+                const serviceNames = {
+                    'acrylic': 'Acrylic Nails',
+                    'gel': 'Gel Manicure',
+                    'classic': 'Classic Manicure',
+                    'pedicure': 'Luxury Pedicure',
+                    'nailart': 'Nail Art',
+                    'dip': 'Dip Powder'
+                };
+
+                bookingDetails.innerHTML = `
+                    <strong>Appointment Details:</strong><br>
+                    <strong>Name:</strong> ${bookingData.firstName} ${bookingData.lastName}<br>
+                    <strong>Service:</strong> ${serviceNames[bookingData.service]}<br>
+                    <strong>Date:</strong> ${this.selectedDate.toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })}<br>
+                    <strong>Time:</strong> ${this.formatTime(bookingData.time)}<br>
+                    <strong>Email:</strong> ${bookingData.email}<br>
+                    <strong>Phone:</strong> ${bookingData.phone}
+                    ${bookingData.notes ? `<br><strong>Notes:</strong> ${bookingData.notes}` : ''}
+                `;
+
+                modal.style.display = 'block';
+
+                // In a real application, you would send this data to your backend
+                console.log('Booking submitted:', bookingData);
+
+                // Reset form
+                this.bookingForm.reset();
+                this.selectedDate = null;
+                this.selectedTime = null;
+                this.updateSelectedDateTime();
+                this.renderCalendar();
+                this.updateTimeSlots();
+            }
+        }
+
+        // Gallery functionality
+        class GallerySlider {
+            constructor() {
+                this.slider = document.getElementById('gallerySlider');
+                this.prevBtn = document.getElementById('prevBtn');
+                this.nextBtn = document.getElementById('nextBtn');
+                this.dotsContainer = document.getElementById('galleryDots');
+                this.slides = document.querySelectorAll('.gallery-slide');
+                this.currentSlide = 0;
+                this.totalSlides = this.slides.length;
+
+                this.init();
+            }
+
+            init() {
+                this.createDots();
+                this.updateSlider();
+                this.setupEventListeners();
+                this.setupLazyLoading();
+            }
+
+            createDots() {
+                for (let i = 0; i < this.totalSlides; i++) {
+                    const dot = document.createElement('div');
+                    dot.classList.add('gallery-dot');
+                    if (i === 0) dot.classList.add('active');
+                    dot.addEventListener('click', () => this.goToSlide(i));
+                    this.dotsContainer.appendChild(dot);
+                }
+            }
+
+            updateSlider() {
+                const offset = -this.currentSlide * 100;
+                this.slider.style.transform = `translateX(${offset}%)`;
+                
+                // Update dots
+                const dots = this.dotsContainer.querySelectorAll('.gallery-dot');
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === this.currentSlide);
+                });
+
+                // Update button states
+                this.prevBtn.disabled = this.currentSlide === 0;
+                this.nextBtn.disabled = this.currentSlide === this.totalSlides - 1;
+
+                // Load images for current slide
+                this.loadImagesInSlide(this.currentSlide);
+            }
+
+            goToSlide(slideIndex) {
+                this.currentSlide = slideIndex;
+                this.updateSlider();
+            }
+
+            nextSlide() {
+                if (this.currentSlide < this.totalSlides - 1) {
+                    this.currentSlide++;
+                    this.updateSlider();
+                }
+            }
+
+            prevSlide() {
+                if (this.currentSlide > 0) {
+                    this.currentSlide--;
+                    this.updateSlider();
+                }
+            }
+
+            setupEventListeners() {
+                this.nextBtn.addEventListener('click', () => this.nextSlide());
+                this.prevBtn.addEventListener('click', () => this.prevSlide());
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') this.prevSlide();
+                    if (e.key === 'ArrowRight') this.nextSlide();
+                });
+
+                // Touch/swipe support
+                let startX = 0;
+                let endX = 0;
+
+                this.slider.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                });
+
+                this.slider.addEventListener('touchend', (e) => {
+                    endX = e.changedTouches[0].clientX;
+                    const diffX = startX - endX;
+
+                    if (Math.abs(diffX) > 50) {
+                        if (diffX > 0) this.nextSlide();
+                        else this.prevSlide();
+                    }
+                });
+            }
+
+            setupLazyLoading() {
+                // Create intersection observer for lazy loading
+                const imageObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            const bgImage = img.getAttribute('data-bg');
+                            if (bgImage) {
+                                // Create a new image to preload
+                                const imageLoader = new Image();
+                                imageLoader.onload = () => {
+                                    img.style.backgroundImage = `url(${bgImage})`;
+                                    img.classList.remove('lazy');
+                                };
+                                imageLoader.src = bgImage;
+                                imageObserver.unobserve(img);
+                            }
+                        }
+                    });
+                }, {
+                    rootMargin: '50px'
+                });
+
+                // Observe all lazy images
+                document.querySelectorAll('.gallery-item.lazy').forEach(img => {
+                    imageObserver.observe(img);
+                });
+
+                // Load first slide images immediately
+                this.loadImagesInSlide(0);
+            }
+
+            loadImagesInSlide(slideIndex) {
+                const slide = this.slides[slideIndex];
+                const lazyImages = slide.querySelectorAll('.gallery-item.lazy');
+                
+                lazyImages.forEach(img => {
+                    const bgImage = img.getAttribute('data-bg');
+                    if (bgImage && img.classList.contains('lazy')) {
+                        const imageLoader = new Image();
+                        imageLoader.onload = () => {
+                            img.style.backgroundImage = `url(${bgImage})`;
+                            img.classList.remove('lazy');
+                        };
+                        imageLoader.src = bgImage;
+                    }
+                });
+            }
+        }
+
+        // Modal functionality
+        const modal = document.getElementById('bookingModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalOkBtn = document.getElementById('modalOkBtn');
+
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        modalOkBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Service card animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Apply animation to service cards and testimonials
+        document.querySelectorAll('.service-card, .testimonial').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new BookingCalendar();
+            new GallerySlider();
+        });
+    </script>
+</body>
+</html>
